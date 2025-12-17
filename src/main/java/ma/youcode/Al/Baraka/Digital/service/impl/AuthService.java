@@ -12,6 +12,8 @@ import ma.youcode.Al.Baraka.Digital.service.interfaces.IAuthService;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 @Service
 @AllArgsConstructor
 public class AuthService implements IAuthService {
@@ -20,18 +22,23 @@ public class AuthService implements IAuthService {
     private final UserMapper userMapper;
 
     @Override
-    public UserResponseDto signup(UserRequestDto requset){
+    public UserResponseDto signup(UserRequestDto requset) {
         User user = userMapper.toEntity(requset);
-        if(userRepository.findByUsername(user.getUsername()).isPresent())
-            throw  new DuplicateUserException("user deja existe");
-        user.setPassword(BCrypt.hashpw(user.getPassword(),BCrypt.gensalt()));
-         return userMapper.toDto(userRepository.save(user));
+        if (userRepository.findByUsername(user.getUsername()).isPresent())
+            throw new DuplicateUserException("user deja existe");
+        user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
+        return userMapper.toDto(userRepository.save(user));
 
 
     }
 
     @Override
     public UserResponseDto signin(LoginRequestDto request) {
+        return null;
+    }
+
+    @Override
+    public Map<String, String> logout() {
         return null;
     }
 }
