@@ -30,7 +30,7 @@ public class AuthService implements IAuthService {
     private final UserMapper userMapper;
     private  final JwtUtil jwtUtil;
     private  final TokenBlacklistService tokenBlacklistService;
-
+    private  AccountNumerManagment accountNumerManagment;
     @Override
     public UserResponseDto signup(UserRequestDto requset) {
         User user = userMapper.toEntity(requset);
