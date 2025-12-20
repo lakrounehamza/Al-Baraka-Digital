@@ -3,6 +3,7 @@ package ma.youcode.Al.Baraka.Digital.dto.response;
 import ma.youcode.Al.Baraka.Digital.enums.UserRole;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 public record UserResponseDto (
@@ -11,6 +12,6 @@ public record UserResponseDto (
          String email,
          UserRole role,
          boolean active,
-         LocalDate created_at
+         LocalDateTime created_at
 ){
 }
