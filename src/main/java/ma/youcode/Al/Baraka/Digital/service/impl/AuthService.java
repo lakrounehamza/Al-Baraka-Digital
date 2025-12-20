@@ -1,5 +1,6 @@
 package ma.youcode.Al.Baraka.Digital.service.impl;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import ma.youcode.Al.Baraka.Digital.dto.request.LoginRequestDto;
 import ma.youcode.Al.Baraka.Digital.dto.request.UserRequestDto;
@@ -11,6 +12,7 @@ import ma.youcode.Al.Baraka.Digital.exception.NotFoundException;
 import ma.youcode.Al.Baraka.Digital.mapper.UserMapper;
 import ma.youcode.Al.Baraka.Digital.repository.UserRepository;
 import ma.youcode.Al.Baraka.Digital.security.JwtUtil;
+import ma.youcode.Al.Baraka.Digital.security.TokenBlacklistService;
 import ma.youcode.Al.Baraka.Digital.service.interfaces.IAuthService;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.security.core.Authentication;
@@ -27,6 +29,7 @@ public class AuthService implements IAuthService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private  final JwtUtil jwtUtil;
+    private  final TokenBlacklistService tokenBlacklistService;
 
     @Override
     public UserResponseDto signup(UserRequestDto requset) {
@@ -53,8 +56,14 @@ public class AuthService implements IAuthService {
     }
 
     @Override
-    public Map<String, String> logout() {
+    public Map<String, String> logout(HttpServletRequest request) {
         SecurityContextHolder.clearContext();
+        String authHeader = request.getHeader("Authorization");
+
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String token = authHeader.substring(7);
+            tokenBlacklistService.blacklistToken(token);
+        }
         return Map.of("se","ok");
     }
     @Override

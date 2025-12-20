@@ -1,5 +1,6 @@
 package ma.youcode.Al.Baraka.Digital.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import ma.youcode.Al.Baraka.Digital.dto.request.LoginRequestDto;
 import ma.youcode.Al.Baraka.Digital.dto.request.UserRequestDto;
@@ -29,7 +30,14 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.OK).body(authService.signin(request));
     }
     @PostMapping("/logout")
-    public ResponseEntity<Map>  logout(){
-        return ResponseEntity.status(HttpStatus.OK).body(authService.logout());
+    public ResponseEntity<Map>  logout(HttpServletRequest request){
+        return ResponseEntity.status(HttpStatus.OK).body(authService.logout(request));
     }
+
+
+    @GetMapping("/profile")
+    public ResponseEntity<UserResponseDto>  pofile(){
+        return ResponseEntity.status(HttpStatus.OK).body(authService.profil());
+    }
+
 }
