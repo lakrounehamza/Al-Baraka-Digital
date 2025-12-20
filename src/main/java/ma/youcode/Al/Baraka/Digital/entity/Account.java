@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -21,4 +22,8 @@ public class Account {
     private User onwer;
     private String numer;
     private BigDecimal balance;
+    @OneToMany(mappedBy = "accountSource_id")
+    List<Operation> operationsSource;
+    @OneToMany(mappedBy = "accountDestination_id")
+    List<Operation> operationsDestination;
 }
