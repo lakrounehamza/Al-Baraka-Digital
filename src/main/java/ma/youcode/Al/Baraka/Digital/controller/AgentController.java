@@ -6,12 +6,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/admin")
-public class AdminController {
+@RequestMapping("/api/agent")
+public class AgentController {
     @GetMapping
-    ResponseEntity<String>  admin(){
-        return ResponseEntity.ok("admin");
+    ResponseEntity<String> agent(){
+        return ResponseEntity.ok("AGENT_BANCAIRE");
     }
-
-
 }
