@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public record AccountResponse(
-        User onwer,
+        UserResponseDto onwer,
         String numer,
         BigDecimal balance,
         List<Operation> operationsSource,
