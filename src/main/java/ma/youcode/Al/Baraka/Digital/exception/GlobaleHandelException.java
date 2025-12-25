@@ -1,7 +1,6 @@
 package ma.youcode.Al.Baraka.Digital.exception;
 
 import ma.youcode.Al.Baraka.Digital.dto.response.ErrorResponse;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -17,7 +16,7 @@ public class GlobaleHandelException {
         return ResponseEntity.status(409).body(error);
     }
     @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<ErrorResponse>  NotFoundHandel(DuplicateUserException e){
+    public ResponseEntity<ErrorResponse>  NotFoundHandel(NotFoundException e){
         ErrorResponse   error = new ErrorResponse(404,e.getMessage(), LocalDateTime.now());
         return ResponseEntity.status(404).body(error);
     }

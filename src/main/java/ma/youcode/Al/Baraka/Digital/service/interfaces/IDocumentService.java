@@ -12,7 +12,7 @@ import java.util.UUID;
 public interface IDocumentService {
     DocumentResponse save(UUID operation_id,MultipartFile file);
     DocumentResponse getById(UUID id);
-    List<DocumentResponse> getByOperationId(UUID operationId);
+     DocumentResponse getByOperationId(UUID operationId);
     void delete(UUID id);
     List<DocumentResponse> getAll();
 }

@@ -21,6 +21,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -51,7 +53,8 @@ public class OperationService implements IOperationService {
                 accountDistenation.setBalance(accountDistenation.getBalance().add(operation.getAmount()));
                 accountRepository.save(accountDistenation);
             }
-            operation.setStatus(OperationStatus.CANCELED);
+            operation.setStatus(OperationStatus.EXECUTED);
+            operation.setValidated_at(LocalDateTime.now());
             accountRepository.save(accountClinet);
 
         }
@@ -73,4 +76,16 @@ public class OperationService implements IOperationService {
     public Page<OperationResponse> getOperationByStatus(OperationStatus status, Pageable pageable) {
         return  operationRepository.findByStatus(status,pageable).map(operationMapper::toDto);
     }
+
+    @Override
+    public OperationResponse updateStatus(UUID id, OperationStatus status) {
+        Operation  operation  =  operationRepository.findById(id).orElseThrow(()->
+                new NotFoundException("not  found operation a  id "+id));
+        operation.setStatus(status);
+        if(status.equals(OperationStatus.VALIDATED))
+            operation.setValidated_at(LocalDateTime.now());
+        Operation   operationSaved  =  operationRepository.save(operation);
+        return  operationMapper.toDto(operationSaved);
+    }
+
 }

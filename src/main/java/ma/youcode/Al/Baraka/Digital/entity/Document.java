@@ -25,6 +25,7 @@ public class Document {
     private String extension;
     private LocalDateTime uploaded_at;
     @OneToOne
+    @JoinColumn(name = "operation_id")
     @JsonBackReference
     private Operation operation;
 

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import ma.youcode.Al.Baraka.Digital.dto.request.DocumentRequest;
 import ma.youcode.Al.Baraka.Digital.dto.response.DocumentResponse;
 import ma.youcode.Al.Baraka.Digital.entity.Document;
+import ma.youcode.Al.Baraka.Digital.exception.NotFoundException;
 import ma.youcode.Al.Baraka.Digital.mapper.DocumentMapper;
 import ma.youcode.Al.Baraka.Digital.mapper.OperationMapper;
 import ma.youcode.Al.Baraka.Digital.repository.DocumentRepository;
@@ -41,8 +42,9 @@ public class DocumentService implements IDocumentService {
     }
 
     @Override
-    public List<DocumentResponse> getByOperationId(UUID operationId) {
-        return List.of();
+    public DocumentResponse getByOperationId(UUID operationId) {
+         Document document = documentRepository.findByOperation_id(operationId).orElseThrow(()->new NotFoundException("not found document a operation Id"+operationId));
+         return  documentMapper.toDto(document);
     }
 
     @Override
