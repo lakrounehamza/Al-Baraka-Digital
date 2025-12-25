@@ -5,6 +5,7 @@ import ma.youcode.Al.Baraka.Digital.dto.request.OperationRequest;
 import ma.youcode.Al.Baraka.Digital.dto.response.OperationResponse;
 import ma.youcode.Al.Baraka.Digital.entity.Account;
 import ma.youcode.Al.Baraka.Digital.entity.Operation;
+import ma.youcode.Al.Baraka.Digital.entity.User;
 import ma.youcode.Al.Baraka.Digital.enums.OperationStatus;
 import ma.youcode.Al.Baraka.Digital.enums.OperationType;
 import ma.youcode.Al.Baraka.Digital.exception.InvalideInputException;
@@ -40,14 +41,13 @@ public class OperationService implements IOperationService {
         if (operation.getAmount().compareTo(BigDecimal.valueOf(10000)) <= 0) {
             if (operation.getType().equals(OperationType.DEPOT) == true)
                 accountClinet.setBalance(accountClinet.getBalance().add(operation.getAmount()));
-            else if(operation.getAmount().compareTo(accountClinet.getBalance()) > 0)
+            else if (operation.getAmount().compareTo(accountClinet.getBalance()) > 0)
                 throw new InvalideInputException("Fonds insuffisants pour le retrait");
             if (operation.getType().equals(OperationType.RETRAIT) == true)
                 accountClinet.setBalance(accountClinet.getBalance().subtract(operation.getAmount()));
-            if (operation.getType().equals(OperationType.VIREMENT) == true)
-            {
+            if (operation.getType().equals(OperationType.VIREMENT) == true) {
                 accountClinet.setBalance(accountClinet.getBalance().subtract(operation.getAmount()));
-                Account accountDistenation = accountRepository.findByNumer(operation.getAccountDestination().getNumer()).orElseThrow(()-> new NotFoundException("not fond account destination"));
+                Account accountDistenation = accountRepository.findByNumer(operation.getAccountDestination().getNumer()).orElseThrow(() -> new NotFoundException("not fond account destination"));
                 accountDistenation.setBalance(accountDistenation.getBalance().add(operation.getAmount()));
                 accountRepository.save(accountDistenation);
             }
@@ -62,8 +62,10 @@ public class OperationService implements IOperationService {
 
 
     @Override
-    public Page<OperationResponse>   getAll(Pageable pageable){
-
-        return   null;
+    public Page<OperationResponse> getAll(Pageable pageable) {
+        String usename = SecurityContextHolder.getContext().getAuthentication().getName();
+        Account account = accountRepository.findByOnwer(usename);
+        Page<Operation> operations = operationRepository.findByAccountSource_Id(account.getId(),pageable);
+        return operations.map(operationMapper::toDto);
     }
 }
