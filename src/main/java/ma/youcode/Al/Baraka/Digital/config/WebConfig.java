@@ -56,9 +56,10 @@ public class WebConfig {
         httpSecurity.csrf(csrf ->  csrf.disable())
                 .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth->
-                        auth.requestMatchers("/api/auth/signin","/api/auth/signup").permitAll()
-                                .requestMatchers("/api/auth/logout").hasAuthority("CLIENT")
-                                .anyRequest().authenticated())
+                               auth
+//                                       .requestMatchers("/api/auth/signin","/api/auth/signup").permitAll()
+//                                       .requestMatchers("/api/auth/logout").hasAuthority("CLIENT")
+                                       .anyRequest().permitAll())
                 .authenticationProvider(daoAuthenticationProvider());
         httpSecurity.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();

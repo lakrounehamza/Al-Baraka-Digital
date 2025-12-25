@@ -11,7 +11,7 @@ public record DocumentResponse(
         String fileName,
         String storagePath,
         String fileType,
-        LocalDateTime uploaded_at,
-        OperationResponse operation
+        String extension,
+        LocalDateTime uploaded_at
 ) {
 }

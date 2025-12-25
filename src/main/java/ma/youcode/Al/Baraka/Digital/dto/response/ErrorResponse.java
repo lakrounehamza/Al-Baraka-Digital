@@ -1,0 +1,9 @@
+package ma.youcode.Al.Baraka.Digital.dto.response;
+
+import java.time.LocalDateTime;
+
+public record ErrorResponse(
+        int Status,String message ,
+        LocalDateTime time
+) {
+}

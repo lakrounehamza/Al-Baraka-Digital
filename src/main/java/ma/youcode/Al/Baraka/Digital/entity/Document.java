@@ -1,7 +1,9 @@
 package ma.youcode.Al.Baraka.Digital.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +14,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Document {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -19,8 +22,10 @@ public class Document {
     private String fileName;
     private String storagePath;
     private String fileType;
+    private String extension;
     private LocalDateTime uploaded_at;
     @OneToOne
+    @JsonBackReference
     private Operation operation;
 
     @PrePersist

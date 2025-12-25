@@ -7,7 +7,6 @@ import java.math.BigDecimal;
 public record OperationRequest(
         OperationType type,
         BigDecimal amount,
-        Long accountSource_id,
-        Long accountDestination_id
+        String accountDestination_id
 ) {
 }

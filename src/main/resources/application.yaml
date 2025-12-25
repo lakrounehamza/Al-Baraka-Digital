@@ -18,3 +18,8 @@ spring:
 jwt:
   secret: Ys+5/eaN0bFKzDSqnnM66Zvbu3KGFaUOAmmwnj531ZeR88YTx9G1/bQM860XWaKr3+PYZdmfKdGzY6DtKC9Ieg==
   expiration: 86400000
+
+cloudinary:
+  api-secret: OddqWj3aAi493D-Tr_5L8ddotCw
+  api-key: 825271736176548
+  cloud-name: dp8texxme

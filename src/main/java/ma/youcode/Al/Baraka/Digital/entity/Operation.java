@@ -1,5 +1,8 @@
 package ma.youcode.Al.Baraka.Digital.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,19 +24,21 @@ public class Operation {
     private UUID id;
     private OperationType type;
     private BigDecimal amount;
-    private OperationStatus status;
+    private OperationStatus status = OperationStatus.PENDING;;
     private LocalDateTime created_at;
     private LocalDateTime validated_at;
     @ManyToOne
     @JoinColumn(name = "accountSource_id")
+    @JsonBackReference
     private Account accountSource;
     @ManyToOne
     @JoinColumn(name = "accountDestination_id")
+    @JsonBackReference
     private Account accountDestination;
 
     @PrePersist
     private void init() {
         created_at = LocalDateTime.now();
-        status = OperationStatus.PENDING;
+//        status = OperationStatus.PENDING;
     }
 }
