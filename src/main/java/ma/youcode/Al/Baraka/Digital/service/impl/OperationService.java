@@ -68,4 +68,9 @@ public class OperationService implements IOperationService {
         Page<Operation> operations = operationRepository.findByAccountSource_Id(account.getId(),pageable);
         return operations.map(operationMapper::toDto);
     }
+
+    @Override
+    public Page<OperationResponse> getOperationByStatus(OperationStatus status, Pageable pageable) {
+        return  operationRepository.findByStatus(status,pageable).map(operationMapper::toDto);
+    }
 }
