@@ -2,7 +2,9 @@ package ma.youcode.Al.Baraka.Digital.config;
 
 import lombok.AllArgsConstructor;
 import ma.youcode.Al.Baraka.Digital.enums.UserRole;
+import ma.youcode.Al.Baraka.Digital.security.AccessDeniedHandlerImpl;
 import ma.youcode.Al.Baraka.Digital.security.AuthTokenFilter;
+import ma.youcode.Al.Baraka.Digital.security.AuthenticationEntryPointImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,6 +36,7 @@ public class WebConfig {
         return  new BCryptPasswordEncoder();
     }
 
+
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
@@ -50,6 +53,14 @@ public class WebConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();
     }
+    @Bean
+    public AuthenticationEntryPointImpl authenticationEntryPoint() {
+        return new AuthenticationEntryPointImpl();
+    }
+    @Bean
+    public AccessDeniedHandlerImpl accessDeniedHandler(){
+        return new AccessDeniedHandlerImpl();
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity  httpSecurity){
@@ -57,9 +68,15 @@ public class WebConfig {
                 .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth->
                                auth
-//                                       .requestMatchers("/api/auth/signin","/api/auth/signup").permitAll()
-//                                       .requestMatchers("/api/auth/logout").hasAuthority("CLIENT")
-                                       .anyRequest().permitAll())
+                                       .requestMatchers("/api/auth/signin","/api/auth/signup").permitAll()
+                                       .requestMatchers("/api/auth/logout").authenticated()
+                                       .requestMatchers( "/api/client/**").hasAuthority("CLIENT")
+                                       .requestMatchers( "/api/admin/**").hasAuthority("ADMIN")
+                                       .requestMatchers( "/api/agent/**").hasAuthority("AGENT_BANCAIRE")
+                                       .anyRequest().authenticated()).exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(authenticationEntryPoint())
+                        .accessDeniedHandler(accessDeniedHandler())
+                )
                 .authenticationProvider(daoAuthenticationProvider());
         httpSecurity.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
