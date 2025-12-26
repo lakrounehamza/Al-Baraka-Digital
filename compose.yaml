@@ -4,18 +4,27 @@ services:
   mysql:
     image: mysql:8
     container_name: mysql-container-8
-
     environment:
       MYSQL_ROOT_PASSWORD: lakroune
       MYSQL_DATABASE: albaraka
       MYSQL_USER: username
       MYSQL_PASSWORD: userpassword
-
     ports:
       - "3307:3306"
-
     volumes:
       - mysql_data:/var/lib/mysql
+
+  app:
+    build: .
+    container_name: albaraka-app
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/albaraka
+      SPRING_DATASOURCE_USERNAME: username
+      SPRING_DATASOURCE_PASSWORD: userpassword
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
 
 volumes:
   mysql_data:
