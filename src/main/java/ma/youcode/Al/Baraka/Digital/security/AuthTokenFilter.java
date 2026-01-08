@@ -69,7 +69,6 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             }
 
         } catch (Exception e) {
-            // Log recommandé au lieu de RuntimeException
             System.err.println("Authentication error: " + e.getMessage());
         }
 
