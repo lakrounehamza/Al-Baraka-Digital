@@ -13,6 +13,8 @@ services:
       - "3312:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+    networks:
+      - net-albaraka_app
 
   app:
     build: .
@@ -25,6 +27,28 @@ services:
       - "8080:8080"
     depends_on:
       - mysql
+      - keycloak
+    networks:
+      - net-albaraka_app
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0
+    container_name: albaraka-keycloak
+    command: start-dev --import-realm
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - "8180:8080"
+    volumes:
+      - keycloak_data:/opt/keycloak/data
+      - ./keycloak-imports:/opt/keycloak/data/import
+    networks:
+      - net-albaraka_app
 
 volumes:
   mysql_data:
+  keycloak_data:
+
+networks:
+  net-albaraka_app:

@@ -36,9 +36,9 @@ public class OperationService implements IOperationService {
 
     @Override
     public OperationResponse save(OperationRequest request) {
-        Operation operation = operationMapper.toEntity(request, accountRepository);
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Account accountClinet = accountRepository.findByOnwer(username);
+        Operation operation = operationMapper.toEntity(request, accountRepository);
         operation.setAccountSource(accountClinet);
         if (operation.getAmount().compareTo(BigDecimal.valueOf(10000)) <= 0) {
             if (operation.getType().equals(OperationType.DEPOT) == true)

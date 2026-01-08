@@ -4,6 +4,7 @@ import ma.youcode.Al.Baraka.Digital.dto.request.OperationRequest;
 import ma.youcode.Al.Baraka.Digital.dto.response.OperationResponse;
 import ma.youcode.Al.Baraka.Digital.entity.Account;
 import ma.youcode.Al.Baraka.Digital.entity.Operation;
+import ma.youcode.Al.Baraka.Digital.exception.NotFoundException;
 import ma.youcode.Al.Baraka.Digital.repository.AccountRepository;
 import ma.youcode.Al.Baraka.Digital.repository.OperationRepository;
 import org.mapstruct.Context;
@@ -28,8 +29,10 @@ public interface OperationMapper {
     );
 
     default Account mapAccount(String numer, AccountRepository accountRepository) {
+        if(numer==null)
+        return new Account();
         return accountRepository.findByNumer(numer).orElseThrow(() ->
-                new RuntimeException("Account not found: " + numer)
+                new NotFoundException("Account not found: " + numer)
         );
 
 
