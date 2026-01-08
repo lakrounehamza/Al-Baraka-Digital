@@ -20,6 +20,8 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/client")
 @AllArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200/")
+
 public class ClientController {
 
     private final IAccountService accountService;

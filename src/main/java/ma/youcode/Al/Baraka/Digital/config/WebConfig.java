@@ -67,13 +67,13 @@ public class WebConfig {
         httpSecurity.csrf(csrf ->  csrf.disable())
                 .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth->
-                               auth
-                                       .requestMatchers("/api/auth/signin","/api/auth/signup").permitAll()
-                                       .requestMatchers("/api/auth/logout").authenticated()
-                                       .requestMatchers( "/api/client/**").hasAuthority("CLIENT")
-                                       .requestMatchers( "/api/admin/**").hasAuthority("ADMIN")
-                                       .requestMatchers( "/api/agent/**").hasAuthority("AGENT_BANCAIRE")
-                                       .anyRequest().authenticated()).exceptionHandling(exception -> exception
+                        auth
+                                .requestMatchers("/api/auth/signin","/api/auth/signup").permitAll()
+                                .requestMatchers("/api/auth/logout").authenticated()
+                                .requestMatchers( "/api/client/**").hasAuthority("CLIENT")
+                                .requestMatchers( "/api/admin/**").hasAuthority("ADMIN")
+                                .requestMatchers( "/api/agent/**").hasAuthority("AGENT_BANCAIRE")
+                                .anyRequest().authenticated()).exceptionHandling(exception -> exception
                         .authenticationEntryPoint(authenticationEntryPoint())
                         .accessDeniedHandler(accessDeniedHandler())
                 )

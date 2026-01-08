@@ -18,6 +18,8 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/agent")
 @AllArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200")
+
 public class AgentController {
 
     private final IOperationService operationService;

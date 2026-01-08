@@ -15,6 +15,8 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/admin")
 @AllArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200")
+
 public class AdminController {
 
     private final IUserService  userService;
