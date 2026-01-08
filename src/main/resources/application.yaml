@@ -3,7 +3,7 @@ spring:
     name: Al-Baraka-Digital
 
   datasource:
-    url: jdbc:mysql://mysql:3306/albaraka
+    url: jdbc:mysql://localhost:3306/albaraka
     username: root
     password: lakroune
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -24,10 +24,3 @@ cloudinary:
   api-secret: OddqWj3aAi493D-Tr_5L8ddotCw
   api-key: 825271736176548
   cloud-name: dp8texxme
-
-#security:
- # oauth2:
-    #    resourceserver:
-    #     jwt:
-    #     issuer-uri: http://albaraka-keycloak:8080/realms/al-baraka
-  #    jwk-set-uri: http://albaraka-keycloak:8080/realms/al-baraka/protocol/openid-connect/certs
