@@ -118,7 +118,7 @@ public class WebConfig {
     @Bean
     public JwtAuthenticationConverter scopeJwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter scopeConverter = new JwtGrantedAuthoritiesConverter();
-        scopeConverter.setAuthorityPrefix("SCOPE_"); // <-- CORRECTION
+        scopeConverter.setAuthorityPrefix("SCOPE_");
         scopeConverter.setAuthoritiesClaimName("scope");
 
         JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
@@ -142,6 +142,10 @@ public class WebConfig {
 
         decoder.setJwtValidator(validator);
         return decoder;
+
+
+
+
     }
 
 }
