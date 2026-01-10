@@ -28,6 +28,7 @@ export class Login {
         next: (res:any)=>{
       localStorage.setItem('token', res.token);
       localStorage.setItem('role', res.user.role);
+          this.router.navigate(['client']);
     }
       }
     );
