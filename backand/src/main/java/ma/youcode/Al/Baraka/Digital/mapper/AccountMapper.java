@@ -9,7 +9,7 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface AccountMapper {
-
+    @Mapping(target = "operations",source = "operationsSource")
     AccountResponse toDto(Account account);
 
     @Mapping(target = "numer", expression = "java(account.getNumer())")

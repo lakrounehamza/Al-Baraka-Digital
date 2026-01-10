@@ -1,7 +1,6 @@
 package ma.youcode.Al.Baraka.Digital.controller;
 
 import lombok.AllArgsConstructor;
-import ma.youcode.Al.Baraka.Digital.dto.request.DocumentRequest;
 import ma.youcode.Al.Baraka.Digital.dto.request.OperationRequest;
 import ma.youcode.Al.Baraka.Digital.dto.response.AccountResponse;
 import ma.youcode.Al.Baraka.Digital.dto.response.OperationResponse;
@@ -20,8 +19,6 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/client")
 @AllArgsConstructor
-@CrossOrigin(origins = "http://localhost:4200/")
-
 public class ClientController {
 
     private final IAccountService accountService;

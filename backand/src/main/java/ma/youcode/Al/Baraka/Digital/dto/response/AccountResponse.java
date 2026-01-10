@@ -10,7 +10,6 @@ public record AccountResponse(
         UserResponseDto onwer,
         String numer,
         BigDecimal balance,
-        List<Operation> operationsSource,
-        List<Operation> operationsDestination
+        List<OperationResponse> operations
 ) {
 }

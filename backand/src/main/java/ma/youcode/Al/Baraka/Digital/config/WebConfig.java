@@ -26,6 +26,8 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtGra
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 @Configuration
 public class WebConfig {
 
@@ -71,6 +73,7 @@ public class WebConfig {
     @Order(2)
     public SecurityFilterChain filterChain(HttpSecurity  httpSecurity){
         httpSecurity.csrf(csrf ->  csrf.disable())
+                .cors(withDefaults())
                 .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth->
                         auth
