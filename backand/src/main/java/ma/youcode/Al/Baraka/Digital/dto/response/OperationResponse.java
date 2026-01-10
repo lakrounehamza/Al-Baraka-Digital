@@ -15,7 +15,6 @@ public record OperationResponse(
          OperationStatus status,
          LocalDateTime created_at,
          LocalDateTime  validated_at ,
-         AccountResponse accountSource,
-         AccountResponse accountDestination
+         AccountDestinationResponse accountDestination
 ) {
 }

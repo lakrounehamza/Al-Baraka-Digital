@@ -8,6 +8,7 @@ import ma.youcode.Al.Baraka.Digital.dto.response.LoginResponseDto;
 import ma.youcode.Al.Baraka.Digital.dto.response.UserResponseDto;
 import ma.youcode.Al.Baraka.Digital.entity.Account;
 import ma.youcode.Al.Baraka.Digital.entity.User;
+import ma.youcode.Al.Baraka.Digital.enums.UserRole;
 import ma.youcode.Al.Baraka.Digital.exception.DuplicateUserException;
 import ma.youcode.Al.Baraka.Digital.exception.NotFoundException;
 import ma.youcode.Al.Baraka.Digital.mapper.UserMapper;
@@ -40,6 +41,7 @@ public class AuthService implements IAuthService {
         User user = userMapper.toEntity(requset);
         if (userRepository.findByUsername(user.getUsername()).isPresent())
             throw new DuplicateUserException("user deja existe");
+        user.setRole(UserRole.CLIENT);
         user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
         User userSave = userRepository.save(user);
         Account account = new Account();
@@ -58,7 +60,7 @@ public class AuthService implements IAuthService {
             throw new NotFoundException(" username  incoricte");
         User user1 = user.get();
         if (!BCrypt.checkpw(request.password(), user1.getPassword()))
-            throw new NotFoundException(" username  incoricte");
+            throw new NotFoundException(" password  incoricte");
         UserResponseDto userResponse = userMapper.toDto(user1);
         String token = jwtUtil.generateToken(user1);
         return new LoginResponseDto(userResponse, token);

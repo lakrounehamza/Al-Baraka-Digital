@@ -40,7 +40,7 @@ public class AccountNumerManagment {
             long number = 1_000_000_000_000_000L
                     + (long) (random.nextDouble() * 9_000_000_000_000_000L);
              numero = Long.toString(number);
-        } while (isContains(numero));
+        } while (!isContains(numero));
         addNumber(numero);
         return numero;
     }
