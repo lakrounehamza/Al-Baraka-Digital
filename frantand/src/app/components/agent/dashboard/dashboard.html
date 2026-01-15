@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard des Opérations</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50 min-h-screen">
+<!-- Header -->
+<div class="bg-white shadow-sm border-b">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+          <i class="fas fa-exchange-alt text-white"></i>
+        </div>
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900">Liste des Opérations</h1>
+          <p class="text-sm text-gray-500">Gestion des transactions</p>
+        </div>
+      </div>
+      <div class="text-right">
+        <p class="text-sm text-gray-600">Total: <span class="font-semibold">3 opérations</span></p>
+        <p class="text-xs text-gray-500">Page 1 sur 1</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <!-- Stats Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+    <div class="bg-white rounded-lg shadow p-6 border-l-4 border-blue-500">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm text-gray-600 mb-1">Total Dépôts</p>
+          <p class="text-2xl font-bold text-gray-900">23,009.00 DH</p>
+          <p class="text-xs text-gray-500 mt-1">1 opération</p>
+        </div>
+        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+          <i class="fas fa-arrow-down text-blue-600 text-xl"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow p-6 border-l-4 border-orange-500">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm text-gray-600 mb-1">Total Retraits</p>
+          <p class="text-2xl font-bold text-gray-900">199,998.88 DH</p>
+          <p class="text-xs text-gray-500 mt-1">2 opérations</p>
+        </div>
+        <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
+          <i class="fas fa-arrow-up text-orange-600 text-xl"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow p-6 border-l-4 border-yellow-500">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm text-gray-600 mb-1">En Attente</p>
+          <p class="text-2xl font-bold text-gray-900">3</p>
+          <p class="text-xs text-gray-500 mt-1">Opérations pending</p>
+        </div>
+        <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
+          <i class="fas fa-clock text-yellow-600 text-xl"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Operations Table -->
+  <div class="bg-white rounded-lg shadow overflow-hidden">
+    <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
+      <h2 class="text-lg font-semibold text-gray-900">Toutes les Opérations</h2>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead class="bg-gray-50 border-b border-gray-200">
+        <tr>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase">Type</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase">Montant</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase">Compte Source</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase">Compte Destination</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase">Statut</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase">Date</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase">Actions</th>
+        </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200" id="operationsTable">
+        <!-- Les données seront injectées ici par JavaScript -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="px-6 py-4 border-t border-gray-200 bg-gray-50">
+      <div class="flex items-center justify-between">
+        <div class="text-sm text-gray-600">
+          Affichage de <span class="font-medium">1-3</span> sur <span class="font-medium">3</span> résultats
+        </div>
+        <div class="flex space-x-2">
+          <button class="px-3 py-1 border border-gray-300 rounded text-sm text-gray-600 bg-white hover:bg-gray-50" disabled>
+            Précédent
+          </button>
+          <button class="px-3 py-1 bg-blue-600 text-white rounded text-sm">
+            1
+          </button>
+          <button class="px-3 py-1 border border-gray-300 rounded text-sm text-gray-600 bg-white hover:bg-gray-50" disabled>
+            Suivant
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Données JSON
+  const data = {
+    "content": [
+      {
+        "id": "b3090ee6-2850-4dfb-a80f-dfde59f1a89b",
+        "type": "DEPOT",
+        "amount": 23009.00,
+        "status": "PENDING",
+        "created_at": "2026-01-10T22:22:00.636841",
+        "validated_at": null,
+        "accountDestination": {
+          "numer": "2188686086236387",
+          "userName": null
+        },
+        "accountSource": {
+          "numer": "5215658006289183",
+          "userName": null
+        }
+      },
+      {
+        "id": "e0089577-c4c1-484e-a3b9-b5fb941dc7fc",
+        "type": "RETRAIT",
+        "amount": 99999.44,
+        "status": "PENDING",
+        "created_at": "2026-01-10T13:19:34.317612",
+        "validated_at": null,
+        "accountDestination": {
+          "numer": "3992718300916667",
+          "userName": null
+        },
+        "accountSource": {
+          "numer": "2188686086236387",
+          "userName": null
+        }
+      },
+      {
+        "id": "e1d15a7c-0542-498f-9a1e-d883406e05ac",
+        "type": "RETRAIT",
+        "amount": 99999.44,
+        "status": "PENDING",
+        "created_at": "2026-01-10T13:19:32.654971",
+        "validated_at": null,
+        "accountDestination": {
+          "numer": "3992718300916667",
+          "userName": null
+        },
+        "accountSource": {
+          "numer": "2188686086236387",
+          "userName": null
+        }
+      }
+    ]
+  };
+
+  // Fonction pour formater la date
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleString('fr-FR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  }
+
+  // Fonction pour obtenir le badge de statut
+  function getStatusBadge(status) {
+    const badges = {
+      'PENDING': '<span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800"><i class="fas fa-clock mr-1"></i>En attente</span>',
+      'COMPLETED': '<span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800"><i class="fas fa-check mr-1"></i>Validé</span>',
+      'REJECTED': '<span class="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800"><i class="fas fa-times mr-1"></i>Rejeté</span>'
+    };
+    return badges[status] || status;
+  }
+
+  // Fonction pour obtenir le badge de type
+  function getTypeBadge(type) {
+    const badges = {
+      'DEPOT': '<span class="px-2 py-1 text-xs font-semibold rounded bg-blue-100 text-blue-800"><i class="fas fa-arrow-down mr-1"></i>Dépôt</span>',
+      'RETRAIT': '<span class="px-2 py-1 text-xs font-semibold rounded bg-orange-100 text-orange-800"><i class="fas fa-arrow-up mr-1"></i>Retrait</span>',
+      'VIREMENT': '<span class="px-2 py-1 text-xs font-semibold rounded bg-purple-100 text-purple-800"><i class="fas fa-exchange-alt mr-1"></i>Virement</span>'
+    };
+    return badges[type] || type;
+  }
+
+  // Fonction pour masquer partiellement le numéro de compte
+  function maskAccount(number) {
+    if (!number) return 'N/A';
+    return number.slice(0, 4) + ' •••• ' + number.slice(-4);
+  }
+
+  // Afficher les opérations
+  function displayOperations() {
+    const tableBody = document.getElementById('operationsTable');
+    tableBody.innerHTML = '';
+
+    data.content.forEach(operation => {
+      const row = document.createElement('tr');
+      row.className = 'hover:bg-gray-50';
+      row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        ${getTypeBadge(operation.type)}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-sm font-semibold text-gray-900">${operation.amount.toLocaleString('fr-FR', {minimumFractionDigits: 2})} DH</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm text-gray-900 font-mono">${maskAccount(operation.accountSource.numer)}</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm text-gray-900 font-mono">${maskAccount(operation.accountDestination.numer)}</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        ${getStatusBadge(operation.status)}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                        ${formatDate(operation.created_at)}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                        <div class="flex space-x-2">
+                            <button class="text-blue-600 hover:text-blue-800" title="Voir détails">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="text-green-600 hover:text-green-800" title="Valider">
+                                <i class="fas fa-check"></i>
+                            </button>
+                            <button class="text-red-600 hover:text-red-800" title="Rejeter">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+      tableBody.appendChild(row);
+    });
+  }
+
+  // Initialiser l'affichage
+  displayOperations();
+</script>
+</body>
+</html>

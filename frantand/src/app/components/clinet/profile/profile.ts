@@ -100,6 +100,59 @@ export class Profile implements OnInit {
     this.burgaremune = !this.burgaremune;
   }
 
+  showModal = false;
+  operationType: 'VIREMENT' | 'DOPOT' | 'RETRAIT' = 'DOPOT';
+
+  operation: any = {
+    type: '',
+    amount: '',
+    accountDestination_id: ''
+  };
+
+  openModal(type: 'VIREMENT' | 'DOPOT' | 'RETRAIT') {
+    this.operationType = type;
+    this.operation = {
+      type: type,
+      amount: '',
+      accountDestination_id: ''
+    };
+    this.showModal = true;
+  }
+
+  closeModal() {
+    this.showModal = false;
+  }
+
+  submitOperation() {
+    console.log(this.operation);
+
+    /*
+    EXEMPLES envoyés au backend :
+
+    VIREMENT:
+    {
+      type: "VIREMENT",
+      amount: "9000",
+      accountDestination_id: "8546029418615930"
+    }
+
+    DOPOT:
+    {
+      type: "DOPOT",
+      amount: "9000"
+    }
+
+    RETRAIT:
+    {
+      type: "RETRAIT",
+      amount: "9000"
+    }
+    */
+
+    this.closeModal();
+  }
+
+
   protected readonly hidden = hidden;
 }
 

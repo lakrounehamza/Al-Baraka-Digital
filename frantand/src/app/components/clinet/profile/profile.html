@@ -24,9 +24,9 @@
               </button>
 
               <ul class="absolute left-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-10">
-                <li><a href="#versement" class="block px-4 py-2 hover:bg-blue-50 hover:text-blue-600 w-full text-left">Versement</a></li>
-                <li><a href="#retrait" class="block px-4 py-2 hover:bg-blue-50 hover:text-blue-600 w-full text-left">Retrait</a></li>
-                <li><a href="#virement" class="block px-4 py-2 hover:bg-blue-50 hover:text-blue-600 w-full text-left">Virement</a></li>
+                <li><button   class="block px-4 py-2 hover:bg-blue-50 hover:text-blue-600 w-full text-left" (click)="openModal('VIREMENT')">Versement</button></li>
+                <li><button   class="block px-4 py-2 hover:bg-blue-50 hover:text-blue-600 w-full text-left" (click)="openModal('RETRAIT')">Retrait</button></li>
+                <li><button   class="block px-4 py-2 hover:bg-blue-50 hover:text-blue-600 w-full text-left" (click)="openModal('DOPOT')">Dopot</button></li>
               </ul>
             </li>
           </ul>
@@ -127,3 +127,53 @@
     </div>
   </div>
 </div>
+
+
+<!-- Modal -->
+<div *ngIf="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+  <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
+
+    <h2 class="text-xl font-bold mb-4 text-gray-800">
+      {{ operationType }} - Nouvelle opération
+    </h2>
+
+    <form (ngSubmit)="submitOperation()">
+
+      <!-- Montant -->
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700">Montant</label>
+        <input type="number"
+               [(ngModel)]="operation.amount"
+               name="amount"
+               required
+               class="w-full mt-1 px-3 py-2 border rounded-md focus:ring focus:ring-blue-300">
+      </div>
+
+      <!-- Compte destination (seulement VIREMENT) -->
+      <div *ngIf="operationType === 'VIREMENT'" class="mb-4">
+        <label class="block text-sm font-medium text-gray-700">Compte destination</label>
+        <input type="text"
+               [(ngModel)]="operation.accountDestination_id"
+               name="accountDestination"
+               required
+               class="w-full mt-1 px-3 py-2 border rounded-md focus:ring focus:ring-blue-300">
+      </div>
+
+      <!-- Actions -->
+      <div class="flex justify-end gap-3 mt-6">
+        <button type="button"
+                (click)="closeModal()"
+                class="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300">
+          Annuler
+        </button>
+
+        <button type="submit"
+                class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+          Confirmer
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
