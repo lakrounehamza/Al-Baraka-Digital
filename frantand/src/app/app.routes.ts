@@ -14,12 +14,14 @@ export const routes: Routes = [{
   {
     path: 'client',
     canActivate:[authGuard],
+    data: { role: 'CLIENT' },
     loadComponent: () =>
       import('./components/clinet/profile/profile').then(m => m.Profile)
   },
   {
     path: 'agent/dashboard',
     canActivate:[authGuard],
+    data: { role: 'AGENT_BANCAIRE' },
     loadComponent: () =>
       import('./components/agent/dashboard/dashboard').then(d => d.Dashboard)
   },

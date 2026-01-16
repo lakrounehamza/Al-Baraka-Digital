@@ -81,7 +81,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
         return path.startsWith("/oauth2/")
                 || path.startsWith("/login/oauth2/")
-                || path.startsWith("/api/agent/operations/pending")
+                //|| path.startsWith("/api/agent/operations/pending")
                 || path.startsWith("/error");
     }
 }

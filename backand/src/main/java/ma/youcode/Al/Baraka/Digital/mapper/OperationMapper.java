@@ -30,7 +30,7 @@ public interface OperationMapper {
 
     default Account mapAccount(String numer, AccountRepository accountRepository) {
         if(numer==null)
-        return new Account();
+        return null;
         return accountRepository.findByNumer(numer).orElseThrow(() ->
                 new NotFoundException("Account not found: " + numer)
         );

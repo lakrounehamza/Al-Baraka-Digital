@@ -1,29 +1,31 @@
-import {CanActivateFn, Router} from '@angular/router';
-import {inject} from '@angular/core';
+import { CanActivateFn, Router, ActivatedRouteSnapshot } from '@angular/router';
+import { inject } from '@angular/core';
+import { AuthService } from '../../services/auth';
 
-export const authGuard: CanActivateFn = (route, state) => {
+export const authGuard: CanActivateFn = (route: ActivatedRouteSnapshot, state) => {
   const router = inject(Router);
-  const token = localStorage.getItem('token');
-  const role = localStorage.getItem('role');
-  console.log(role)
-  if (!token) {
-    router.navigate(['']);
-    return true;
-  } else {
-    if (state.url === '/client' && role !== 'CLIENT') {
-      return router.createUrlTree(['/authorized']);
-    }
-    if (state.url !== '/client'   && role === 'CLIENT') {
-      return router.createUrlTree(['/client']);
-    }
-    if (state.url === '/agent/dashboard' && role !== 'AGENT_BANCAIRE') {
-      return router.createUrlTree(['/authorized']);
-    }
-    if (state.url !== '/agent/dashboard' && role === 'AGENT_BANCAIRE') {
+  const authService = inject(AuthService);
 
-      return router.createUrlTree(['/agent/dashboard']);
-    }
-
-    return true;
+  if (!authService.isAuthenticated()) {
+    return router.createUrlTree(['/login']); // Assuming login route is '/login'
   }
-}
+
+  const requiredRole = route.data?.['role'];
+  if (requiredRole && !authService.hasRole(requiredRole)) {
+    return router.createUrlTree(['/authorized']);
+  }
+
+  // Additional logic for specific redirects if needed
+  const role = authService.getRole();
+  if (role === 'CLIENT' && !state.url.startsWith('/client')) {
+    return router.createUrlTree(['/client']);
+  }
+  if (role === 'AGENT_BANCAIRE' && !state.url.startsWith('/agent')) {
+    return router.createUrlTree(['/agent/dashboard']);
+  }
+  if (role === 'Admin' && !state.url.startsWith('/admin')) {
+    return router.createUrlTree(['/admin/dashboard']);
+  }
+
+  return true;
+};

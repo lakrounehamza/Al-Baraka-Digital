@@ -95,7 +95,7 @@ public class WebConfig {
     @Order(1)
     public SecurityFilterChain oauth2PendingFilterChain(HttpSecurity http) throws Exception {
         http
-                .securityMatcher("/api/agent/operations/pending")
+                .securityMatcher("/auth/api/agent/operations/pending")
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth

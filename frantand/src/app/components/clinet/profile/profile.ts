@@ -3,6 +3,7 @@ import {PofileService} from '../../../services/client/pofile';
 import {FormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
 import {hidden} from '@angular/forms/signals';
+import {OperationService} from '../../../services/client/operation';
 
 @Component({
   selector: 'app-profile',
@@ -19,10 +20,10 @@ export class Profile implements OnInit {
   active: boolean = false;
   createdAt: string = "";
   operations: any[] = [];
-  burgaremune= false;
+  burgaremune = false;
 
 
-  constructor(private profileservice: PofileService, private cd: ChangeDetectorRef) {
+  constructor(private profileservice: PofileService, private cd: ChangeDetectorRef,private operationService: OperationService) {
   }
 
   ngOnInit(): void {
@@ -75,9 +76,9 @@ export class Profile implements OnInit {
 
   getStatusBadge(status: string): string {
     let index: 1 | 2 | 3 | 0 = 1;
-    if(status==="PENDING") index=1;
-    if(status==="VALIDATED") index=2;
-    if(status==="REJECTED") index=3;
+    if (status === "PENDING") index = 1;
+    if (status === "VALIDATED") index = 2;
+    if (status === "REJECTED") index = 3;
     const config = {
       1: {class: 'bg-yellow-100 text-yellow-800', label: 'En attente'},
       2: {class: 'bg-green-100 text-green-800', label: 'Validé'},
@@ -95,22 +96,21 @@ export class Profile implements OnInit {
 
   }
 
-  toggleMobile(){
+  toggleMobile() {
     console.log("hello");
     this.burgaremune = !this.burgaremune;
   }
 
   showModal = false;
-  operationType: 'VIREMENT' | 'DOPOT' | 'RETRAIT' = 'DOPOT';
-
+  operationType: 'VIREMENT' | 'DEPOT' | 'RETRAIT' = 'DEPOT';
   operation: any = {
     type: '',
     amount: '',
     accountDestination_id: ''
   };
 
-  openModal(type: 'VIREMENT' | 'DOPOT' | 'RETRAIT') {
-    this.operationType = type;
+  openModal(type: 'VIREMENT' | 'DEPOT' | 'RETRAIT') {
+    this.operationType=type;
     this.operation = {
       type: type,
       amount: '',
@@ -124,32 +124,17 @@ export class Profile implements OnInit {
   }
 
   submitOperation() {
+
+
+    this.operationService.createOperation(this.operation.type,this.operation.amount,this.operation.accountDestination_id).subscribe({
+      next : (res:any)=>{
+        console.log("id : "+res.id)
+        this.closeModal();
+    }
+    })
+
     console.log(this.operation);
 
-    /*
-    EXEMPLES envoyés au backend :
-
-    VIREMENT:
-    {
-      type: "VIREMENT",
-      amount: "9000",
-      accountDestination_id: "8546029418615930"
-    }
-
-    DOPOT:
-    {
-      type: "DOPOT",
-      amount: "9000"
-    }
-
-    RETRAIT:
-    {
-      type: "RETRAIT",
-      amount: "9000"
-    }
-    */
-
-    this.closeModal();
   }
 
 
