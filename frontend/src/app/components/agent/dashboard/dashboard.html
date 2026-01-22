@@ -1,0 +1,286 @@
+<div class="bg-gray-50 min-h-screen">
+  <!-- Loading Overlay -->
+  <div *ngIf="isLoading && operations.length === 0" class="fixed inset-0 bg-white bg-opacity-75 flex items-center justify-center z-50">
+    <div class="text-center">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+      <p class="mt-4 text-gray-600">Chargement des opérations...</p>
+    </div>
+  </div>
+  <!-- Header -->
+  <div class="bg-white shadow-sm border-b">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+            <i class="fas fa-exchange-alt text-white"></i>
+          </div>
+          <div>
+            <h1 class="text-2xl font-bold text-gray-900">Liste des Opérations</h1>
+            <p class="text-sm text-gray-500">Gestion des transactions</p>
+          </div>
+        </div>
+        <div class="text-right flex items-center space-x-4">
+          <button (click)="refreshData()"
+                  [disabled]="isLoading"
+                  class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200">
+            <svg *ngIf="!isLoading" class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+            </svg>
+            <svg *ngIf="isLoading" class="w-4 h-4 mr-2 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+            </svg>
+            <span *ngIf="!isLoading">Actualiser</span>
+            <span *ngIf="isLoading">Actualisation...</span>
+          </button>
+          <div>
+            <p class="text-sm text-gray-600">Total: <span class="font-semibold">{{ operations.length }} opérations</span></p>
+            <p class="text-xs text-gray-500">Page 1 sur 1</p>
+            <p *ngIf="lastUpdated" class="text-xs text-gray-400">
+              Dernière mise à jour: {{ lastUpdated | date:'HH:mm:ss' }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Error Message -->
+    <div *ngIf="errorMessage" class="mb-6 bg-red-50 border border-red-200 rounded-lg p-4">
+      <div class="flex items-center">
+        <div class="shrink-0">
+          <i class="fas fa-exclamation-triangle text-red-400"></i>
+        </div>
+        <div class="ml-3">
+          <p class="text-sm text-red-800">{{ errorMessage }}</p>
+        </div>
+        <div class="ml-auto">
+          <button (click)="errorMessage = null" class="text-red-400 hover:text-red-600">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Success Message -->
+    <div *ngIf="successMessage" class="mb-6 bg-green-50 border border-green-200 rounded-lg p-4">
+      <div class="flex items-center">
+        <div class="shrink-0">
+          <i class="fas fa-check-circle text-green-400"></i>
+        </div>
+        <div class="ml-3">
+          <p class="text-sm text-green-800">{{ successMessage }}</p>
+        </div>
+        <div class="ml-auto">
+          <button (click)="successMessage = null" class="text-green-400 hover:text-green-600">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+      <div class="bg-white rounded-lg shadow p-6 border-l-4 border-green-500">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm text-gray-600 mb-1">Total Dépôts</p>
+            <p class="text-2xl font-bold text-gray-900">{{ totalDeposits | number:'1.2-2' }} DH</p>
+            <p class="text-xs text-gray-500 mt-1">{{ totalDepositsCount }} opération(s)</p>
+          </div>
+          <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+            <i class="fas fa-arrow-down text-green-600 text-xl"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-lg shadow p-6 border-l-4 border-red-500">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm text-gray-600 mb-1">Total Retraits</p>
+            <p class="text-2xl font-bold text-gray-900">{{ totalWithdrawals | number:'1.2-2' }} DH</p>
+            <p class="text-xs text-gray-500 mt-1">{{ totalWithdrawalsCount }} opération(s)</p>
+          </div>
+          <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+            <i class="fas fa-arrow-up text-red-600 text-xl"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-lg shadow p-6 border-l-4 border-yellow-500">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm text-gray-600 mb-1">En Attente</p>
+            <p class="text-2xl font-bold text-gray-900">{{ pendingOperationsCount }}</p>
+            <p class="text-xs text-gray-500 mt-1">Opérations pending</p>
+          </div>
+          <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
+            <i class="fas fa-clock text-yellow-600 text-xl"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="bg-white rounded-lg shadow p-8 text-center">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+      <p class="text-gray-600">Chargement des opérations...</p>
+    </div>
+
+    <!-- Operations Table -->
+    <div *ngIf="!isLoading" class="bg-white rounded-lg shadow overflow-hidden">
+      <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
+        <h2 class="text-lg font-semibold text-gray-900">Opérations en Attente</h2>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full">
+          <thead class="bg-gray-50 border-b border-gray-200">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase">Type</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase">Montant</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase">Compte Source</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase">Compte Destination</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase">Statut</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase">Date</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase">Actions</th>
+          </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200">
+            <tr *ngFor="let op of operations" class="hover:bg-gray-50">
+              <td class="px-6 py-4 whitespace-nowrap" [innerHTML]="getTypeBadge(op.type)"></td>
+              <td class="px-6 py-4 whitespace-nowrap text-lg font-bold text-gray-900">{{ op.amount | number:'1.2-2' }} MAD</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-600">
+                {{ op.accountSource?.numer ? formatAccountNumber(op.accountSource.numer) : '-' }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-600">
+                {{ op.accountDestination?.numer ? formatAccountNumber(op.accountDestination.numer) : '-' }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap" [innerHTML]="getStatusBadge(op.status)"></td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ op.created_at | date:'dd/MM/yyyy HH:mm' }}</td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <button (click)="openDetailsModal(op)"
+                        class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 text-sm">
+                  Détails
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Empty State -->
+      <div *ngIf="operations.length === 0" class="px-6 py-12 text-center">
+        <i class="fas fa-inbox text-gray-400 text-4xl mb-4"></i>
+        <p class="text-gray-500">Aucune opération en attente</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Details Modal -->
+  <div *ngIf="showDetailsModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden">
+      <!-- Header -->
+      <div class="bg-linear-to-r from-blue-600 to-blue-700 px-6 py-4">
+        <div class="flex items-center justify-between">
+          <h2 class="text-xl font-bold text-white">Détails de l'opération</h2>
+          <button (click)="closeDetailsModal()" class="text-white hover:text-gray-200 transition-colors">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="p-6 overflow-y-auto max-h-[calc(90vh-120px)]">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Left Column -->
+          <div class="space-y-4">
+            <div class="bg-gray-50 rounded-lg p-4">
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Informations générales</label>
+              <div class="space-y-2">
+                <div class="flex justify-between">
+                  <span class="text-sm text-gray-600">ID:</span>
+                  <span class="text-sm font-mono text-gray-900">{{ selectedOperation?.id }}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-sm text-gray-600">Type:</span>
+                  <span class="text-sm font-medium text-gray-900" [innerHTML]="getTypeBadge(selectedOperation?.type)"></span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-sm text-gray-600">Statut:</span>
+                  <span class="text-sm" [innerHTML]="getStatusBadge(selectedOperation?.status)"></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-gray-50 rounded-lg p-4">
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Montant</label>
+              <div class="text-2xl font-bold text-green-600">
+                {{ selectedOperation?.amount | number:'1.2-2' }} MAD
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column -->
+          <div class="space-y-4">
+            <div class="bg-gray-50 rounded-lg p-4">
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Dates</label>
+              <div class="space-y-2">
+                <div>
+                  <span class="text-sm text-gray-600">Créée le:</span>
+                  <div class="text-sm font-medium text-gray-900">
+                    {{ selectedOperation?.created_at | date:'dd/MM/yyyy à HH:mm' }}
+                  </div>
+                </div>
+                <div *ngIf="selectedOperation?.validated_at">
+                  <span class="text-sm text-gray-600">Validée le:</span>
+                  <div class="text-sm font-medium text-green-600">
+                    {{ selectedOperation?.validated_at | date:'dd/MM/yyyy à HH:mm' }}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-gray-50 rounded-lg p-4">
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Comptes</label>
+              <div class="space-y-3">
+                <div>
+                  <span class="text-sm text-gray-600">Source:</span>
+                  <div class="text-sm font-mono font-medium text-gray-900">
+                    {{ selectedOperation?.accountSource?.numer ? formatAccountNumber(selectedOperation.accountSource.numer) : '-' }}
+                  </div>
+                </div>
+                <div>
+                  <span class="text-sm text-gray-600">Destination:</span>
+                  <div class="text-sm font-mono font-medium text-gray-900">
+                    {{ selectedOperation?.accountDestination?.numer ? formatAccountNumber(selectedOperation.accountDestination.numer) : '-' }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer with Action Buttons -->
+      <div class="bg-gray-50 px-6 py-4 flex justify-between items-center">
+        <div class="text-sm text-gray-600">
+          <strong>Action requise:</strong> Approuver ou rejeter cette opération
+        </div>
+        <div class="flex space-x-3">
+          <button (click)="rejectOperation(selectedOperation.id)"
+                  class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium">
+            <i class="fas fa-times mr-2"></i>Rejeter
+          </button>
+          <button (click)="approveOperation(selectedOperation.id)"
+                  class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium">
+            <i class="fas fa-check mr-2"></i>Approuver
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

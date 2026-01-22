@@ -1,0 +1,411 @@
+<!-- profile.html -->
+<div class="bg-gray-50 min-h-screen">
+
+  <!-- Navbar -->
+  <nav class="bg-white shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="relative flex items-center justify-between h-16">
+        <div class="flex-shrink-0 flex items-center">
+          <span class="text-xl font-bold text-blue-700">AL BARAKA</span>
+        </div>
+
+        <!-- Menu desktop -->
+        <div class="hidden sm:flex sm:items-center sm:ml-6 sm:flex-1 sm:justify-between">
+          <ul class="flex space-x-4 text-gray-700 font-medium items-center">
+            <li><a href="#" class="hover:text-blue-600 px-3 py-2 rounded-md text-sm">Accueil</a></li>
+            <li><a href="#" class="hover:text-blue-600 px-3 py-2 rounded-md text-sm">Mes opérations</a></li>
+
+            <li class="relative group">
+              <button class="hover:text-blue-600 px-3 py-2 rounded-md text-sm flex items-center">
+                Créer une opération
+                <svg class="ml-1 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd"
+                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                        clip-rule="evenodd"/>
+                </svg>
+              </button>
+
+              <ul
+                class="absolute left-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-10">
+                <li>
+                  <button class="block px-4 py-2 hover:bg-blue-50 hover:text-blue-600 w-full text-left"
+                          (click)="openModal('DEPOT')">Versement
+                  </button>
+                </li>
+                <li>
+                  <button class="block px-4 py-2 hover:bg-blue-50 hover:text-blue-600 w-full text-left"
+                          (click)="openModal('RETRAIT')">Retrait
+                  </button>
+                </li>
+                <li>
+                  <button class="block px-4 py-2 hover:bg-blue-50 hover:text-blue-600 w-full text-left"
+                          (click)="openModal('VIREMENT')">Virement
+                  </button>
+                </li>
+              </ul>
+            </li>
+          </ul>
+
+          <div class="flex items-center gap-3">
+            <p class="text-gray-700 font-medium">{{ username }}</p>
+            <a href="#deconnexion"
+               class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 text-sm font-medium">Déconnexion</a>
+          </div>
+        </div>
+
+        <!-- Mobile menu button -->
+        <div class="sm:hidden">
+          <button id="mobile-menu-button" type="button"
+                  class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none"
+                  (click)="toggleMobile()">
+            <span class="sr-only">Ouvrir le menu</span>
+            <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                 stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile menu -->
+    <div class="sm:hidden " [ngClass]="{hidden: !burgaremune}" id="mobile-menu">
+      <div class="px-2 pt-2 pb-3 space-y-1">
+        <a href="#" class="block px-3 py-2 text-gray-900 rounded-md hover:bg-gray-100 text-base font-medium">Accueil</a>
+        <a href="#" class="block px-3 py-2 text-gray-900 rounded-md hover:bg-gray-100 text-base font-medium">Mes
+          opérations</a>
+
+        <div class="relative">
+          <button
+            class="w-full text-left px-3 py-2 text-gray-900 rounded-md hover:bg-gray-100 text-base font-medium flex items-center justify-between mobile-dropdown-trigger">
+            Créer une opérations
+            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd"
+                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                    clip-rule="evenodd"/>
+            </svg>
+          </button>
+          <div class="hidden pl-4 py-2 mobile-dropdown-content">
+            <a href="#versement" class="block py-2 hover:text-blue-600">Versement</a>
+            <a href="#retrait" class="block py-2 hover:text-blue-600">Retrait</a>
+            <a href="#virement" class="block py-2 hover:text-blue-600">Virement</a>
+          </div>
+        </div>
+
+        <div class="border-t border-gray-200 pt-2 mt-2">
+          <p class="px-3 py-2 text-gray-700 font-medium">{{ username }}</p>
+          <a href="#deconnexion"
+             class="block mx-3 mt-2 text-center bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 font-medium">Déconnexion</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Contenu Principal -->
+  <div class="max-w-7xl mx-auto px-4 py-8">
+
+    <!-- Carte Informations du Compte -->
+    <div class="bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg shadow-lg p-6 mb-8 text-white">
+      <h2 class="text-xl font-semibold mb-4">Informations du Compte</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <p class="text-blue-200 text-sm mb-1">Numéro de compte</p>
+          <p class="text-2xl font-mono font-bold">{{ numerAccount?formatAccountNumber(numerAccount):'' }}</p>
+        </div>
+        <div>
+          <p class="text-blue-200 text-sm mb-1">Solde disponible</p>
+          <p class="text-3xl font-bold">{{ balance }} DH</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Liste des Opérations -->
+    <div class="bg-white rounded-lg shadow-lg">
+      <div class="px-6 py-4 border-b border-gray-200">
+        <h2 class="text-2xl font-bold text-gray-900">Mes Opérations</h2>
+        <p class="text-sm text-gray-600 mt-1">Total : {{ operations.length }} opérations</p>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full">
+          <thead class="bg-gray-50">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Montant</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Compte</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">action</th>
+          </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+          <tr *ngFor="let op of operations" class="hover:bg-gray-50">
+            <td class="px-6 py-4 whitespace-nowrap" [innerHTML]="getTypeBadge(op.type)"></td>
+            <td class="px-6 py-4 whitespace-nowrap text-lg font-bold text-gray-900">{{ op.amount | number:'1.2-2' }}
+              MAD
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap" [innerHTML]="getStatusBadge(op.status)">{{ op.status }}</td>
+            <td
+              class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ op.created_at | date:'dd/MM/yyyy HH:mm' }}
+            </td>
+            <td
+              class="px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-600">{{op.accountDestination && op.accountDestination.numer ? formatAccountNumber(op.accountDestination.numer) : ""}}
+
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <button *ngIf="op.status === 'PENDING'"
+                      (click)="openDetailsModal(op)"
+                      class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 text-sm">
+                Détails
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Details Modal -->
+<div *ngIf="showDetailsModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+  <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden">
+    <!-- Header -->
+    <div class="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-4">
+      <div class="flex items-center justify-between">
+        <h2 class="text-xl font-bold text-white">Détails de l'opération</h2>
+        <button (click)="closeDetailsModal()" class="text-white hover:text-gray-200 transition-colors">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="p-6 overflow-y-auto max-h-[calc(90vh-120px)]">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Left Column -->
+        <div class="space-y-4">
+          <div class="bg-gray-50 rounded-lg p-4">
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Informations générales</label>
+            <div class="space-y-2">
+              <div class="flex justify-between">
+                <span class="text-sm text-gray-600">ID:</span>
+                <span class="text-sm font-mono text-gray-900">{{ selectedOperation?.id }}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-sm text-gray-600">Type:</span>
+                <span class="text-sm font-medium text-gray-900" [innerHTML]="getTypeBadge(selectedOperation?.type)"></span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-sm text-gray-600">Statut:</span>
+                <span class="text-sm" [innerHTML]="getStatusBadge(selectedOperation?.status)"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-gray-50 rounded-lg p-4">
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Montant</label>
+            <div class="text-2xl font-bold text-green-600">
+              {{ selectedOperation?.amount | number:'1.2-2' }} MAD
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="space-y-4">
+          <div class="bg-gray-50 rounded-lg p-4">
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Dates</label>
+            <div class="space-y-2">
+              <div>
+                <span class="text-sm text-gray-600">Créée le:</span>
+                <div class="text-sm font-medium text-gray-900">
+                  {{ selectedOperation?.created_at | date:'dd/MM/yyyy à HH:mm' }}
+                </div>
+              </div>
+              <div *ngIf="selectedOperation?.validated_at">
+                <span class="text-sm text-gray-600">Validée le:</span>
+                <div class="text-sm font-medium text-green-600">
+                  {{ selectedOperation?.validated_at | date:'dd/MM/yyyy à HH:mm' }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="selectedOperation?.accountDestination" class="bg-gray-50 rounded-lg p-4">
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Compte destination</label>
+            <div class="space-y-2">
+              <div>
+                <span class="text-sm text-gray-600">Numéro:</span>
+                <div class="text-sm font-mono font-medium text-gray-900">
+                  {{ selectedOperation?.accountDestination.numer ? formatAccountNumber(selectedOperation.accountDestination.numer) : '' }}
+                </div>
+              </div>
+              <div *ngIf="selectedOperation?.accountDestination.userName">
+                <span class="text-sm text-gray-600">Titulaire:</span>
+                <div class="text-sm font-medium text-gray-900">
+                  {{ selectedOperation.accountDestination.userName }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="selectedOperation?.document" class="bg-gray-50 rounded-lg p-4">
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Document</label>
+            <div class="flex items-center space-x-2">
+              <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+              </svg>
+              <span class="text-sm text-gray-900">{{ selectedOperation?.document }}</span>
+            </div>
+          </div>
+
+          <!-- Upload Section (only for PENDING operations) -->
+          <div *ngIf="selectedOperation?.status === 'PENDING'" class="bg-blue-50 rounded-lg p-4 border-2 border-dashed border-blue-200">
+            <label class="block text-sm font-semibold text-blue-700 mb-3">Télécharger un document justificatif</label>
+
+            <!-- File Input -->
+            <div class="mb-3">
+              <input type="file"
+                     #fileInput
+                     (change)="onFileSelected($event)"
+                     accept="image/*,.pdf,.doc,.docx"
+                     class="hidden"
+                     id="file-upload">
+              <label for="file-upload"
+                     class="cursor-pointer flex items-center justify-center w-full px-4 py-3 border-2 border-blue-300 border-dashed rounded-lg hover:border-blue-400 hover:bg-blue-25 transition-all duration-200"
+                     (dragover)="onDragOver($event)"
+                     (dragleave)="onDragLeave($event)"
+                     (drop)="onDrop($event)">
+                <div class="text-center">
+                  <svg class="mx-auto h-8 w-8 text-blue-400 mb-2" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                  </svg>
+                  <p class="text-sm text-blue-600">
+                    <span class="font-medium">Cliquez pour sélectionner</span> ou glissez-déposez
+                  </p>
+                  <p class="text-xs text-blue-500 mt-1">PNG, JPG, PDF, DOC jusqu'à 10MB</p>
+                </div>
+              </label>
+            </div>
+
+            <!-- Selected File Preview -->
+            <div *ngIf="selectedFile" class="mt-3">
+              <div class="flex items-center justify-between bg-white p-3 rounded-lg border shadow-sm">
+                <div class="flex items-center space-x-3">
+                  <div class="shrink-0">
+                    <svg *ngIf="!isImageFile(selectedFile)" class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    <img *ngIf="isImageFile(selectedFile)"
+                         [src]="filePreviewUrl"
+                         class="w-8 h-8 object-cover rounded border"
+                         alt="Aperçu du fichier">
+                  </div>
+                  <div class="min-w-0 flex-1">
+                    <p class="text-sm font-medium text-gray-900 truncate">{{ selectedFile.name }}</p>
+                    <p class="text-xs text-gray-500">{{ (selectedFile.size / 1024 / 1024).toFixed(2) }} MB</p>
+                    <p class="text-xs text-green-600 mt-1" *ngIf="isValidFileType(selectedFile)">✓ Type de fichier valide</p>
+                  </div>
+                </div>
+                <button (click)="removeFile()" class="text-red-500 hover:text-red-700 p-1 rounded-full hover:bg-red-50 transition-colors">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Upload Progress -->
+            <div *ngIf="isUploading" class="mt-3">
+              <div class="bg-white p-3 rounded-lg border">
+                <div class="flex items-center space-x-3">
+                  <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600"></div>
+                  <span class="text-sm text-gray-600">Téléchargement en cours...</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
+                  <div class="bg-blue-600 h-2 rounded-full animate-pulse" style="width: 100%"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Upload Button -->
+            <div *ngIf="selectedFile && !isUploading" class="mt-3 flex justify-end space-x-2">
+              <button (click)="removeFile()"
+                      class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors">
+                Annuler
+              </button>
+              <button (click)="uploadDocument()"
+                      class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium">
+                Télécharger le document
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="bg-gray-50 px-6 py-4 flex justify-end">
+      <button type="button"
+              (click)="closeDetailsModal()"
+              class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium">
+        Fermer
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal -->
+<div *ngIf="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+  <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
+
+    <h2 class="text-xl font-bold mb-4 text-gray-800">
+      {{ operationType }} - Nouvelle opération
+    </h2>
+
+    <form (ngSubmit)="submitOperation()">
+      <input class="hidden"   value="{{ operationType }}">
+      <!-- Montant -->
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700">Montant</label>
+        <input type="number"
+               [(ngModel)]="operation.amount"
+               name="amount"
+               required
+               min="0.01"
+               step="0.01"
+               class="w-full mt-1 px-3 py-2 border rounded-md focus:ring focus:ring-blue-300">
+      </div>
+
+      <!-- Compte destination (seulement VIREMENT) -->
+      <div *ngIf="operationType === 'VIREMENT'" class="mb-4">
+        <label class="block text-sm font-medium text-gray-700">Compte destination</label>
+        <input type="text"
+               [(ngModel)]="operation.accountDestination_id"
+               name="accountDestination"
+               required
+               class="w-full mt-1 px-3 py-2 border rounded-md focus:ring focus:ring-blue-300">
+      </div>
+
+      <!-- Actions -->
+      <div class="flex justify-end gap-3 mt-6">
+        <button type="button"
+                (click)="closeModal()"
+                class="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300">
+          Annuler
+        </button>
+
+        <button type="submit"
+                class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+          Confirmer
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
